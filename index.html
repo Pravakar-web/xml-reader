@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Directory</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .actions-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-btn {
+            background-color: #475569;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            transition: background-color 0.2s ease;
+        }
+
+        .file-upload-btn:hover {
+            background-color: #334155;
+        }
+
+        .status-msg {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .status-msg.error {
+            color: #ef4444;
+            font-weight: 500;
+        }
+
+        .status-msg.success {
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        .table-container {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #f1f5f9;
+        }
+
+        th, td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        th {
+            font-weight: 600;
+            color: #334155;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+        }
+
+        tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .empty-placeholder {
+            text-align: center;
+            padding: 48px;
+            color: var(--text-muted);
+        }
+
+        .salary {
+            font-variant-numeric: tabular-nums;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Employee Information Directory</h1>
+        <p>Parse and view employee records dynamically from XML</p>
+    </header>
+
+    <div class="actions-card">
+        <div class="btn-group">
+            <button onclick="fetchXML()">Load Default employees.xml</button>
+            <div class="file-upload-wrapper">
+                <label for="fileInput" class="file-upload-btn">Upload Custom XML</label>
+                <input type="file" id="fileInput" accept=".xml" onchange="loadUploadedXML(event)">
+            </div>
+        </div>
+        <div id="statusMessage" class="status-msg">Click a button or upload an XML file to view data.</div>
+    </div>
+
+    <div class="table-container">
+        <table id="employeeTable">
+            <thead>
+                <tr>
+                    <th>Emp ID</th>
+                    <th>Full Name</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Email Address</th>
+                    <th>Salary ($)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td colspan="6" class="empty-placeholder">No employee data loaded yet.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function updateStatus(message, type = '') {
+        const statusEl = document.getElementById('statusMessage');
+        statusEl.textContent = message;
+        statusEl.className = 'status-msg ' + type;
+    }
+
+    // 1. Fetch from employees.xml directly (works via HTTP server or fetch)
+    function fetchXML() {
+        updateStatus('Loading employees.xml...');
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'employees.xml', true);
+        xhr.onload = function () {
+            if (xhr.status === 200 || (xhr.status === 0 && xhr.responseXML)) {
+                const xmlDoc = xhr.responseXML || new DOMParser().parseFromString(xhr.responseText, 'application/xml');
+                parseAndDisplayXML(xmlDoc);
+                updateStatus('Loaded successfully from employees.xml', 'success');
+            } else {
+                updateStatus('Failed to load employees.xml (Note: If opened via file://, use the Upload button below).', 'error');
+            }
+        };
+        xhr.onerror = function () {
+            updateStatus('Network or CORS error. If opening locally, use "Upload Custom XML".', 'error');
+        };
+        xhr.send();
+    }
+
+    // 2. Read local file directly using FileReader (bypasses browser file:// protocol restrictions)
+    function loadUploadedXML(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        updateStatus(`Reading ${file.name}...`);
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(e.target.result, "application/xml");
+                
+                // Check for XML parse errors
+                const parseError = xmlDoc.getElementsByTagName("parsererror");
+                if (parseError.length > 0) {
+                    updateStatus('Invalid XML structure.', 'error');
+                    return;
+                }
+
+                parseAndDisplayXML(xmlDoc);
+                updateStatus(`Successfully displayed records from ${file.name}`, 'success');
+            } catch (err) {
+                updateStatus('Error parsing XML file.', 'error');
+            }
+        };
+        reader.onerror = function() {
+            updateStatus('Failed to read the file.', 'error');
+        };
+        reader.readAsText(file);
+    }
+
+    // 3. Render the parsed XML to the HTML Table
+    function parseAndDisplayXML(xml) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        const employees = xml.getElementsByTagName('employee');
+
+        if (employees.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="empty-placeholder">No &lt;employee&gt; records found in XML.</td></tr>';
+            return;
+        }
+
+        for (let i = 0; i < employees.length; i++) {
+            const emp = employees[i];
+
+            const id = getNodeValue(emp, 'id');
+            const name = getNodeValue(emp, 'name');
+            const dept = getNodeValue(emp, 'department');
+            const designation = getNodeValue(emp, 'designation');
+            const email = getNodeValue(emp, 'email');
+            const salary = getNodeValue(emp, 'salary');
+
+            const formattedSalary = salary ? Number(salary).toLocaleString() : 'N/A';
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${escapeHtml(id)}</strong></td>
+                <td>${escapeHtml(name)}</td>
+                <td><span class="badge">${escapeHtml(dept)}</span></td>
+                <td>${escapeHtml(designation)}</td>
+                <td><a href="mailto:${escapeHtml(email)}" style="color: var(--primary-color); text-decoration: none;">${escapeHtml(email)}</a></td>
+                <td class="salary">$${formattedSalary}</td>
+            `;
+            tbody.appendChild(row);
+        }
+    }
+
+    function getNodeValue(parent, tagName) {
+        const node = parent.getElementsByTagName(tagName)[0];
+        return node && node.textContent ? node.textContent.trim() : '';
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Automatically load employees.xml on page open
+    window.addEventListener('DOMContentLoaded', () => {
+        fetchXML();
+    });
+</script>
+
+</body>
+</html>
+

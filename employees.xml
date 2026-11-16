@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<employees>
+    <employee>
+        <id>EMP001</id>
+        <name>Alice Johnson</name>
+        <department>Engineering</department>
+        <designation>Senior Software Engineer</designation>
+        <email>alice.johnson@example.com</email>
+        <salary>95000</salary>
+    </employee>
+    <employee>
+        <id>EMP002</id>
+        <name>Bob Smith</name>
+        <department>Human Resources</department>
+        <designation>HR Manager</designation>
+        <email>bob.smith@example.com</email>
+        <salary>75000</salary>
+    </employee>
+    <employee>
+        <id>EMP003</id>
+        <name>Charlie Davis</name>
+        <department>Marketing</department>
+        <designation>Marketing Specialist</designation>
+        <email>charlie.davis@example.com</email>
+        <salary>68000</salary>
+    </employee>
+    <employee>
+        <id>EMP004</id>
+        <name>Diana Prince</name>
+        <department>Engineering</department>
+        <designation>DevOps Lead</designation>
+        <email>diana.prince@example.com</email>
+        <salary>105000</salary>
+    </employee>
+    <employee>
+        <id>EMP005</id>
+        <name>Evan Wright</name>
+        <department>Finance</department>
+        <designation>Financial Analyst</designation>
+        <email>evan.wright@example.com</email>
+        <salary>72000</salary>
+    </employee>
+    <employee>
+        <id>EMP006</id>
+        <name>Fiona Gallagher</name>
+        <department>Design</department>
+        <designation>UI/UX Designer</designation>
+        <email>fiona.gallagher@example.com</email>
+        <salary>70000</salary>
+    </employee>
+</employees>
+
